@@ -45,12 +45,14 @@
   <div class="wrap footer-inner">
     <span>Relay — un relais de notifications, pas un réseau social.</span>
     <span class="footer-links">
+      <a href="https://github.com/pierricksamson/api_discord_message_sender"><box-icon type='logo' name='github' color="#8b93a7"></box-icon></a>
       <a href="{{ url_for('docs') }}">Documentation</a>
       <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a>
     </span>
   </div>
 </footer>
 
+<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% block scripts %}{% endblock %}
 </body>
