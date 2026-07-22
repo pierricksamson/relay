@@ -50,7 +50,7 @@ def create_app() -> Flask:
 
     @app.get("/docs")
     def docs():
-        return render_template("docs.html", base_url=Config.BASE_URL)
+        return render_template("docs.html", base_url=Config.BASE_URL, limit=Config.RATE_LIMIT_PER_MINUTE)
 
     # -----------------------------------------------------------------
     # Discord OAuth2
@@ -193,4 +193,4 @@ def create_app() -> Flask:
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=True)
