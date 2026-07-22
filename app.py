@@ -62,6 +62,10 @@ def create_app() -> Flask:
     def index():
         return render_template("index.html")
 
+    @app.get("/cgu")
+    def cgu():
+        return render_template("cgu.html")
+
     @app.get("/docs")
     def docs():
         return render_template(
