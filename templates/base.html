@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Relay — notifications Discord pour vos scripts{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="{{ url_for('index') }}">
+      <span class="brand-mark" aria-hidden="true">
+        <span class="dot dot-1"></span><span class="dot dot-2"></span><span class="dot dot-3"></span>
+      </span>
+      Relay
+    </a>
+
+    <nav class="mainnav">
+      <a href="{{ url_for('docs') }}">Docs</a>
+      {% set u = current_user() %}
+      {% if u %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a class="navuser" href="{{ url_for('dashboard') }}">
+          <img src="{{ avatar_url(u['discord_id'], u['avatar']) }}" alt="" class="navavatar">
+          <span>{{ u['username'] }}</span>
+        </a>
+        <a class="btn btn-ghost btn-sm" href="{{ url_for('logout') }}">Déconnexion</a>
+      {% else %}
+        <a class="btn btn-discord btn-sm" href="{{ url_for('login') }}">Se connecter avec Discord</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="sitefooter">
+  <div class="wrap footer-inner">
+    <span>Relay — un relais de notifications, pas un réseau social.</span>
+    <span class="footer-links">
+      <a href="{{ url_for('docs') }}">Documentation</a>
+      <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a>
+    </span>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

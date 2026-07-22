@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Relay{% endblock %}
+{% block content %}
+
+<section class="wrap dash-head">
+  <img src="{{ avatar_url(user['discord_id'], user['avatar']) }}" alt="" class="dash-avatar">
+  <div>
+    <h1 class="dash-name">{{ user['username'] }}</h1>
+    <p class="dash-id mono">Discord ID&nbsp;: {{ user['discord_id'] }}</p>
+  </div>
+</section>
+
+{% if new_key %}
+<section class="wrap">
+  <div class="alert alert-success">
+    <strong>Nouvelle clé générée.</strong> Copiez-la maintenant&nbsp;: elle ne sera plus jamais affichée en clair.
+    <div class="key-reveal">
+      <code id="new-key-value">{{ new_key }}</code>
+      <button class="btn btn-ghost btn-sm" type="button" data-copy="{{ new_key }}">Copier</button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="wrap dash-grid">
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Clés API</h2>
+    </div>
+
+    <form class="inline-form" method="post" action="{{ url_for('create_key') }}">
+      <input type="text" name="name" placeholder="Nom de la clé (ex: serveur prod)" maxlength="60">
+      <button class="btn btn-primary btn-sm" type="submit">Générer</button>
+    </form>
+
+    {% if keys %}
+    <table class="table">
+      <thead>
+        <tr><th>Nom</th><th>Clé</th><th>Créée</th><th>Statut</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for k in keys %}
+        <tr class="{{ 'row-revoked' if k['revoked_at'] else '' }}">
+          <td>{{ k['name'] }}</td>
+          <td class="mono">{{ k['key_prefix'] }}…</td>
+          <td class="mono">{{ k['created_at'][:10] }}</td>
+          <td>
+            {% if k['revoked_at'] %}
+              <span class="badge badge-muted">Révoquée</span>
+            {% else %}
+              <span class="badge badge-online">Active</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if not k['revoked_at'] %}
+            <form method="post" action="{{ url_for('revoke_key', key_id=k['id']) }}"
+                  onsubmit="return confirm('Révoquer cette clé ? Elle cessera de fonctionner immédiatement.');">
+              <button class="btn btn-danger btn-sm" type="submit">Révoquer</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">Aucune clé pour le moment. Générez-en une pour commencer à envoyer des notifications.</p>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Dernières notifications</h2>
+    </div>
+
+    {% if notifications %}
+    <ul class="notif-list">
+      {% for n in notifications %}
+      <li class="notif-item {{ 'notif-sent' if n['status'] == 'sent' else 'notif-failed' }}">
+        <span class="notif-dot"></span>
+        <div class="notif-body">
+          <p class="notif-message">{{ n['message'] }}</p>
+          {% if n['error'] %}
+          <p class="notif-error">{{ n['error'] }}</p>
+          {% endif %}
+        </div>
+        <span class="notif-time mono">{{ n['created_at'][11:16] }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty-state">Aucune notification envoyée pour l'instant.</p>
+    {% endif %}
+  </div>
+
+</section>
+
+{% endblock %}

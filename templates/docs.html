@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Documentation — Relay{% endblock %}
+{% block content %}
+
+<section class="wrap docs">
+
+  <p class="eyebrow">Référence API</p>
+  <h1>Un seul endpoint à retenir</h1>
+  <p class="hero-sub docs-intro">
+    Relay expose un unique endpoint public. Authentifiez-vous avec la clé
+    générée dans votre <a href="{{ url_for('dashboard') }}">dashboard</a>,
+    envoyez un message, il arrive en DM Discord.
+  </p>
+
+  <div class="endpoint-card">
+    <div class="endpoint-line">
+      <span class="method method-post">POST</span>
+      <code>/api/send</code>
+    </div>
+
+    <h3>Corps de la requête (JSON)</h3>
+    <table class="table table-params">
+      <thead><tr><th>Champ</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>api_key</code></td><td>string</td><td>Clé API générée depuis le dashboard (préfixe <code>pk_</code>).</td></tr>
+        <tr><td><code>message</code></td><td>string</td><td>Contenu du message, 2000 caractères max (limite Discord).</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Réponses</h3>
+    <table class="table table-params">
+      <thead><tr><th>Code</th><th>Signification</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-online">200</span></td><td>Message envoyé.</td></tr>
+        <tr><td><span class="badge badge-muted">400</span></td><td>Requête invalide (champ manquant, message trop long).</td></tr>
+        <tr><td><span class="badge badge-danger">401</span></td><td>Clé API invalide ou révoquée.</td></tr>
+        <tr><td><span class="badge badge-danger">429</span></td><td>Limite de débit atteinte.</td></tr>
+        <tr><td><span class="badge badge-danger">502</span></td><td>Le bot n'a pas pu délivrer le DM (utilisateur non joignable).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Exemples</h2>
+
+  <div class="tabs" data-tabs>
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-tab="python">Python</button>
+      <button class="tab-btn" data-tab="curl">cURL</button>
+      <button class="tab-btn" data-tab="js">JavaScript</button>
+    </div>
+
+    <pre class="codeblock tab-panel active" data-panel="python"><code><span class="tok-kw">import</span> requests
+
+response = requests.post(
+    <span class="tok-str">"{{ base_url }}/api/send"</span>,
+    json={
+        <span class="tok-str">"api_key"</span>: <span class="tok-str">"pk_votre_cle"</span>,
+        <span class="tok-str">"message"</span>: <span class="tok-str">"Le job de backup s'est terminé avec succès."</span>,
+    },
+)
+<span class="tok-kw">print</span>(response.status_code, response.json())</code></pre>
+
+    <pre class="codeblock tab-panel" data-panel="curl"><code>curl -X POST {{ base_url }}/api/send \
+  -H <span class="tok-str">"Content-Type: application/json"</span> \
+  -d <span class="tok-str">'{"api_key": "pk_votre_cle", "message": "Deploy terminé ✅"}'</span></code></pre>
+
+    <pre class="codeblock tab-panel" data-panel="js"><code><span class="tok-kw">await</span> fetch(<span class="tok-str">"{{ base_url }}/api/send"</span>, {
+  method: <span class="tok-str">"POST"</span>,
+  headers: { <span class="tok-str">"Content-Type"</span>: <span class="tok-str">"application/json"</span> },
+  body: JSON.stringify({
+    api_key: <span class="tok-str">"pk_votre_cle"</span>,
+    message: <span class="tok-str">"Deploy terminé ✅"</span>,
+  }),
+});</code></pre>
+  </div>
+
+  <h2>Bon à savoir</h2>
+  <ul class="docs-list">
+    <li>Le bot Discord doit partager un serveur avec vous (ou vous avoir déjà écrit) pour pouvoir vous envoyer un DM — c'est une règle imposée par Discord, pas par Relay.</li>
+    <li>Une clé révoquée depuis le dashboard cesse de fonctionner immédiatement.</li>
+    <li>Gardez vos clés hors de vos dépôts publics : traitez-les comme un mot de passe.</li>
+  </ul>
+
+</section>
+
+{% endblock %}
