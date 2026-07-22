@@ -44,7 +44,7 @@
   "dash_notifs_title": "Recent notifications",
   "dash_no_notifs": "No notifications sent yet.",
 
-  "docs_eyebrow": "API Reference",
+  "docs_eyebrow": "API Reference v1",
   "docs_title": "Only one endpoint to remember",
   "docs_intro": "Relay exposes a single public endpoint. Authenticate using the key generated in your dashboard, send a message, and it arrives directly in your Discord DMs.",
   "docs_body_title": "Request Body (JSON)",
