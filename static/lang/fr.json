@@ -125,7 +125,7 @@
   "cgu_s4_li2": "<strong>Limitation de débit (Rate Limiting) :</strong> Un quota de requêtes par minute par clé / adresse IP est appliqué afin de maintenir la stabilité de la plateforme et de prévenir les abus.",
   "cgu_s4_li3": "<strong>Délivrabilité :</strong> Pour recevoir les notifications, vous devez partager au moins un serveur en commun avec le bot Discord de Relay ou avoir interagi avec lui, et autoriser les messages privés.",
   "cgu_s5_title": "5. Usages Interdits",
-  "cgu_s5_intro": "Sont strictly interdits sous peine de suspension ou de suppression immédiate du compte :",
+  "cgu_s5_intro": "Sont strictement interdits sous peine de suspension ou de suppression immédiate du compte :",
   "cgu_s5_li1": "L'envoi d'activités malveillantes, de spam, de phishing ou de contenus illégaux via les notifications.",
   "cgu_s5_li2": "La tentative de contournement des limites de débit ou des mécanismes de sécurité de l'API.",
   "cgu_s5_li3": "L'utilisation du service à des fins d'envoi massif non sollicité à des tiers (Relay est un outil de notification personnelle, pas un réseau de diffusion de masse).",
