@@ -8,9 +8,9 @@ from dotenv import set_key
 from flask import Flask, abort, jsonify, redirect, render_template, request, session, url_for, Response
 
 import bot
-import database as db
-import discord_oauth
-from config import Config
+import src.database as db
+import src.discord_oauth as discord_oauth
+from src.config import Config
 
 
 def bilingual(fr: str, en: str) -> str:

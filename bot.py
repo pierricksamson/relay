@@ -19,7 +19,7 @@ import threading
 
 import discord
 
-from config import Config
+from src.config import Config
 
 log = logging.getLogger("discord-notify-bot")
 

@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 
 import requests
 
-from config import Config
+from src.config import Config
 
 SCOPES = "identify"
 

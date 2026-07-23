@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 
 import bcrypt
 
-from config import Config
+from src.config import Config
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
