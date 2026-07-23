@@ -5,11 +5,6 @@
 MVP Flask + discord.py + SQLite permettant d'envoyer un DM Discord depuis
 n'importe quel script via une simple requête `POST /api/send`.
 
-> ⚠️ **Avant toute mise en production**, lisez [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md).
-> Le dépôt tel quel contient plusieurs réglages adaptés au développement local
-> uniquement (mode debug Flask, absence de CSRF, secret par défaut) qui
-> doivent être corrigés avant d'exposer l'app publiquement.
-
 ## Arborescence du projet
 
 Flask cherche les templates dans `templates/` et les fichiers statiques dans
