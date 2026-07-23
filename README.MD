@@ -1,6 +1,6 @@
 # Relay — Discord notifications for your scripts
 
-*[Lire ceci en français](README.fr.md)*
+*[Lire ceci en français](README.FR.MD)*
 
 A Flask + discord.py + SQLite MVP that sends a Discord DM from any script
 via a simple `POST /api/send` request.

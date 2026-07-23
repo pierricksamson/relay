@@ -1,6 +1,6 @@
 # Relay — notifications Discord pour vos scripts
 
-*[Read this in English](README.md)*
+*[Read this in English](README.MD)*
 
 MVP Flask + discord.py + SQLite permettant d'envoyer un DM Discord depuis
 n'importe quel script via une simple requête `POST /api/send`.
