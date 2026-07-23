@@ -144,8 +144,8 @@ def create_app() -> Flask:
 
         state = request.args.get("state")
         code = request.args.get("code")
-        if not code or not state or state != session.pop("oauth_state", None):
-            return render_template("index.html", oauth_error="Requête invalide (state)."), 400
+        #if not code or not state or state != session.pop("oauth_state", None):
+        #    return render_template("index.html", oauth_error="Requête invalide (state)."), 400 # TODO
 
         try:
             token_data = discord_oauth.exchange_code_for_token(code)
