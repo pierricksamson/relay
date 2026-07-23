@@ -103,8 +103,8 @@ p { color: var(--text-muted); }
 
 .brand-mark { display: inline-flex; gap: 3px; }
 .brand-mark .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-.brand-mark .dot-2 { background: var(--accent-strong); opacity: 0.75; }
-.brand-mark .dot-3 { background: var(--python-y); opacity: 0.6; }
+.brand-mark .dot-2 { background: var(--accent-strong); }
+.brand-mark .dot-3 { background: var(--python-y); }
 
 .mainnav { display: flex; align-items: center; gap: 20px; }
 .mainnav a { text-decoration: none; color: var(--text-muted); font-size: 0.94rem; }
