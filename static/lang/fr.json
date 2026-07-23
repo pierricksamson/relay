@@ -90,7 +90,7 @@
   "resp_200": "Message envoyé.",
   "resp_400": "Requête invalide (champ manquant, ...).",
   "resp_401": "Clé API invalide ou révoquée.",
-  "resp_413": "Message trop long",
+  "resp_413": "Message trop long.",
   "resp_429": "Limite de débit atteinte.",
   "resp_429_suffix": "Protection DDoS.",
   "resp_502": "Le bot n'a pas pu délivrer le DM (utilisateur non joignable).",

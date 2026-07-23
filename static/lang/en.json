@@ -90,7 +90,7 @@
   "resp_200": "Message sent.",
   "resp_400": "Invalid request (missing field, ...).",
   "resp_401": "Invalid or revoked API key.",
-  "resp_413": "Message too long",
+  "resp_413": "Message too long.",
   "resp_429": "Rate limit reached.",
   "resp_429_suffix": "DDoS protection.",
   "resp_502": "The bot could not deliver the DM (user unreachable).",

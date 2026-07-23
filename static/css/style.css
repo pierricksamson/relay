@@ -809,3 +809,37 @@ p { color: var(--text-muted); }
   justify-content: flex-end;
   gap: 10px;
 }
+
+
+
+/*CGU*/
+
+.panel-cgu h2 {
+    font-size: 1.25rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.6rem;
+    color: var(--fg-title, #fff);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.4rem;
+  }
+  .panel-cgu p, .panel-cgu ul {
+    color: var(--fg-muted, #a0aec0);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+  .panel-cgu ul {
+    padding-left: 1.5rem;
+  }
+  .panel-cgu li {
+    margin-bottom: 0.4rem;
+  }
+  .panel-cgu code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+  }
+  .panel-cgu a {
+    color: var(--accent, #5865f2);
+    text-decoration: underline;
+  }
