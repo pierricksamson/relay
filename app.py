@@ -38,7 +38,8 @@ def create_app() -> Flask:
     limiter = Limiter(
         get_remote_address,
         app=app,
-        storage_uri="memory://",
+        storage_uri=Config.STOCKAGE_URI,
+        strategy="moving-window",
     )
 
     db.init_db()
@@ -195,8 +196,9 @@ def create_app() -> Flask:
 
         state = request.args.get("state")
         code = request.args.get("code")
-        #if not code or not state or state != session.pop("oauth_state", None):
-        #    return render_template("index.html", oauth_error="Requête invalide (state)."), 400 # TODO
+
+        if not code or not state or state != session.pop("oauth_state", None):
+            return render_template("index.html", oauth_error="Requête invalide (state)."), 400
 
         try:
             token_data = discord_oauth.exchange_code_for_token(code)

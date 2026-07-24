@@ -29,6 +29,8 @@ class Config:
 
     DATABASE_PATH = os.environ.get("DATABASE_PATH", "instance/app.db")
 
+    STOCKAGE_URI = os.environ.get("STOCAGE_URI", "memory://")
+
     # Notifications kept per user in the dashboard / history
     HISTORY_PAGE_SIZE = 20
 
