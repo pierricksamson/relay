@@ -104,7 +104,6 @@
 
   "docs_types_title": "Available notification types",
   "docs_types_intro": "Each value below can be used in the <code>type</code> field of <code>POST /api/send</code>.",
-  "th_name": "Name",
   "th_title": "Displayed title",
   "th_color": "Color",
   "cat_general": "General",

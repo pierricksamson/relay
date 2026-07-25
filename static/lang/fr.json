@@ -33,7 +33,6 @@
   "dash_keys_title": "Clés API",
   "dash_keys_placeholder": "Nom de la clé (ex: serveur prod)",
   "btn_generate": "Générer",
-  "th_name": "Nom",
   "th_key": "Clé",
   "th_created": "Créée",
   "th_status": "Statut",
