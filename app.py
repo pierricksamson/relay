@@ -474,6 +474,11 @@ def create_app() -> Flask:
     # Errors
     # -----------------------------------------------------------------
 
+    @app.route("/<path:path>")
+    def file_path(path):
+        if "google" in path: 
+            return render_template(path)
+
     @app.errorhandler(404)
     def not_found(_e):
         return render_template("index.html"), 404
