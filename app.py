@@ -332,6 +332,7 @@ def create_app() -> Flask:
         payload = request.get_json(silent=True) or {}
         api_key = payload.get("api_key")
         message = payload.get("message")
+        notif_type_raw = payload.get("type")  # optionnel : "info" | "warning" | "alert" | "success"
 
         if not api_key or not isinstance(api_key, str):
             return jsonify(error=bilingual(
@@ -348,6 +349,22 @@ def create_app() -> Flask:
                 "Le message dépasse la limite Discord de 2000 caractères.",
                 "Message exceeds Discord's 2000 character limit.",
             )), 413
+
+        notif_type = None
+        if notif_type_raw:
+            if not isinstance(notif_type_raw, str):
+                return jsonify(error=bilingual(
+                    "Champ 'type' invalide.",
+                    "Invalid 'type' field.",
+                )), 400
+            normalized = notif_type_raw.strip().lower()
+            if normalized not in bot.NOTIFICATION_TYPES:
+                allowed = ", ".join(bot.NOTIFICATION_TYPES.keys())
+                return jsonify(error=bilingual(
+                    f"Type inconnu. Valeurs autorisées : {allowed}.",
+                    f"Unknown type. Allowed values: {allowed}.",
+                )), 400
+            notif_type = normalized
 
         auth = db.verify_api_key(api_key)
         if auth is None:
@@ -370,7 +387,12 @@ def create_app() -> Flask:
                     "Rate limit reached, try again in a minute.",
                 )), 429
 
-        result = bot.send_dm(user["discord_id"], message, key_prefix=key_prefix)
+        result = bot.send_dm(
+            user["discord_id"],
+            message,
+            key_prefix=key_prefix,
+            notif_type=notif_type,
+        )
 
         db.log_notification(
             user_id=user["id"],

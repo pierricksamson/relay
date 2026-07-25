@@ -30,6 +30,336 @@ _client = discord.Client(intents=intents)
 _loop: asyncio.AbstractEventLoop | None = None
 _ready_event = threading.Event()
 
+# ---------------------------------------------------------------------
+# Types de notification : titre affiché + couleur d'embed.
+# Champ "type" optionnel côté API ; si absent/vide -> comportement actuel
+# (pas de titre, couleur blurple par défaut).
+# ---------------------------------------------------------------------
+
+NOTIFICATION_TYPES = {
+
+    # Général
+    "info": {
+        "title": "ℹ️ Info",
+        "color": discord.Color.blurple()
+    },
+    "success": {
+        "title": "✅ Success",
+        "color": discord.Color.green()
+    },
+    "warning": {
+        "title": "⚠️ Warning",
+        "color": discord.Color.orange()
+    },
+    "alert": {
+        "title": "🚨 Alert",
+        "color": discord.Color.red()
+    },
+    "error": {
+        "title": "❌ Error",
+        "color": discord.Color.red()
+    },
+    "critical": {
+        "title": "🔥 Critical",
+        "color": discord.Color.dark_red()
+    },
+
+
+    # Développement
+    "debug": {
+        "title": "🐛 Debug",
+        "color": discord.Color.dark_grey()
+    },
+    "test": {
+        "title": "🧪 Test",
+        "color": discord.Color.teal()
+    },
+    "build": {
+        "title": "🏗️ Build",
+        "color": discord.Color.blue()
+    },
+    "compile": {
+        "title": "⚙️ Compile",
+        "color": discord.Color.blue()
+    },
+    "deploy": {
+        "title": "🚀 Deployment",
+        "color": discord.Color.purple()
+    },
+    "release": {
+        "title": "📦 Release",
+        "color": discord.Color.purple()
+    },
+    "rollback": {
+        "title": "↩️ Rollback",
+        "color": discord.Color.orange()
+    },
+
+
+    # Serveur / Infrastructure
+    "server": {
+        "title": "🖥️ Server",
+        "color": discord.Color.dark_blue()
+    },
+    "startup": {
+        "title": "🟢 Startup",
+        "color": discord.Color.green()
+    },
+    "shutdown": {
+        "title": "🔴 Shutdown",
+        "color": discord.Color.red()
+    },
+    "restart": {
+        "title": "🔄 Restart",
+        "color": discord.Color.orange()
+    },
+    "maintenance": {
+        "title": "🛠️ Maintenance",
+        "color": discord.Color.orange()
+    },
+    "uptime": {
+        "title": "⏱️ Uptime",
+        "color": discord.Color.green()
+    },
+
+
+    # Monitoring
+    "cpu": {
+        "title": "🧠 CPU",
+        "color": discord.Color.orange()
+    },
+    "ram": {
+        "title": "💾 RAM",
+        "color": discord.Color.orange()
+    },
+    "disk": {
+        "title": "💿 Disk",
+        "color": discord.Color.orange()
+    },
+    "temperature": {
+        "title": "🌡️ Temperature",
+        "color": discord.Color.red()
+    },
+    "performance": {
+        "title": "📊 Performance",
+        "color": discord.Color.blue()
+    },
+    "health": {
+        "title": "❤️ Health Check",
+        "color": discord.Color.green()
+    },
+
+
+    # Réseau
+    "network": {
+        "title": "🌐 Network",
+        "color": discord.Color.blue()
+    },
+    "connection": {
+        "title": "🔗 Connection",
+        "color": discord.Color.blue()
+    },
+    "timeout": {
+        "title": "⌛ Timeout",
+        "color": discord.Color.orange()
+    },
+    "offline": {
+        "title": "📴 Offline",
+        "color": discord.Color.red()
+    },
+    "online": {
+        "title": "📡 Online",
+        "color": discord.Color.green()
+    },
+
+
+    # Sécurité
+    "security": {
+        "title": "🔒 Security",
+        "color": discord.Color.gold()
+    },
+    "login": {
+        "title": "🔑 Login",
+        "color": discord.Color.green()
+    },
+    "logout": {
+        "title": "🚪 Logout",
+        "color": discord.Color.greyple()
+    },
+    "authentication": {
+        "title": "🪪 Authentication",
+        "color": discord.Color.gold()
+    },
+    "permission": {
+        "title": "⛔ Permission",
+        "color": discord.Color.red()
+    },
+    "attack": {
+        "title": "⚔️ Attack Detected",
+        "color": discord.Color.dark_red()
+    },
+    "firewall": {
+        "title": "🧱 Firewall",
+        "color": discord.Color.dark_gold()
+    },
+
+
+    # Base de données
+    "database": {
+        "title": "🗄️ Database",
+        "color": discord.Color.teal()
+    },
+    "backup": {
+        "title": "💽 Backup",
+        "color": discord.Color.green()
+    },
+    "restore": {
+        "title": "♻️ Restore",
+        "color": discord.Color.blue()
+    },
+    "migration": {
+        "title": "🔀 Migration",
+        "color": discord.Color.purple()
+    },
+
+
+    # API
+    "api": {
+        "title": "🔌 API",
+        "color": discord.Color.blue()
+    },
+    "request": {
+        "title": "📨 Request",
+        "color": discord.Color.blurple()
+    },
+    "rate_limit": {
+        "title": "🚦 Rate Limit",
+        "color": discord.Color.orange()
+    },
+    "webhook": {
+        "title": "🪝 Webhook",
+        "color": discord.Color.purple()
+    },
+
+
+    # Utilisateurs
+    "user": {
+        "title": "👤 User",
+        "color": discord.Color.light_grey()
+    },
+    "signup": {
+        "title": "📝 New User",
+        "color": discord.Color.green()
+    },
+    "delete_user": {
+        "title": "🗑️ User Deleted",
+        "color": discord.Color.red()
+    },
+
+
+    # Paiements / Business
+    "payment": {
+        "title": "💳 Payment",
+        "color": discord.Color.gold()
+    },
+    "purchase": {
+        "title": "🛒 Purchase",
+        "color": discord.Color.green()
+    },
+    "invoice": {
+        "title": "🧾 Invoice",
+        "color": discord.Color.blue()
+    },
+    "refund": {
+        "title": "↩️ Refund",
+        "color": discord.Color.orange()
+    },
+
+
+    # IA / Machine Learning
+    "ai": {
+        "title": "🤖 AI",
+        "color": discord.Color.purple()
+    },
+    "model": {
+        "title": "🧠 Model",
+        "color": discord.Color.purple()
+    },
+    "training": {
+        "title": "📚 Training",
+        "color": discord.Color.blue()
+    },
+    "prediction": {
+        "title": "🔮 Prediction",
+        "color": discord.Color.teal()
+    },
+
+
+    # Trading / Finance
+    "trade": {
+        "title": "📈 Trade",
+        "color": discord.Color.green()
+    },
+    "buy": {
+        "title": "🟢 Buy",
+        "color": discord.Color.green()
+    },
+    "sell": {
+        "title": "🔴 Sell",
+        "color": discord.Color.red()
+    },
+    "profit": {
+        "title": "💰 Profit",
+        "color": discord.Color.green()
+    },
+    "loss": {
+        "title": "📉 Loss",
+        "color": discord.Color.red()
+    },
+    "market": {
+        "title": "📊 Market",
+        "color": discord.Color.blue()
+    },
+
+
+    # Bots
+    "bot": {
+        "title": "🤖 Bot",
+        "color": discord.Color.purple()
+    },
+    "bot_online": {
+        "title": "🟢 Bot Online",
+        "color": discord.Color.green()
+    },
+    "bot_offline": {
+        "title": "🔴 Bot Offline",
+        "color": discord.Color.red()
+    },
+    "command": {
+        "title": "⌨️ Command",
+        "color": discord.Color.blurple()
+    },
+
+
+    # Fichiers
+    "file": {
+        "title": "📄 File",
+        "color": discord.Color.blue()
+    },
+    "upload": {
+        "title": "⬆️ Upload",
+        "color": discord.Color.green()
+    },
+    "download": {
+        "title": "⬇️ Download",
+        "color": discord.Color.blue()
+    },
+    "storage": {
+        "title": "📁 Storage",
+        "color": discord.Color.orange()
+    }
+}
+
 
 @_client.event
 async def on_ready():
@@ -68,6 +398,7 @@ def send_dm(
     discord_id: str,
     message: str,
     key_prefix: str | None = None,
+    notif_type: str | None = None,
     timeout: float = 15.0,
 ) -> SendResult:
     """
@@ -78,6 +409,11 @@ def send_dm(
     reminding the recipient which API key sent it (its prefix, e.g.
     "pk_AbC123XyZ…") — enough for them to go revoke it from the dashboard
     if the notification is unexpected.
+
+    notif_type: optional, one of NOTIFICATION_TYPES keys (case-insensitive):
+    "info" | "warning" | "alert" | "success". If None/empty/unknown, falls
+    back to the historical plain blurple embed with no title (unchanged
+    behavior).
     """
     if _loop is None:
         return SendResult(
@@ -85,6 +421,8 @@ def send_dm(
             "🇫🇷 Le bot Discord n'est pas démarré (token manquant ?). / "
             "🇺🇸 Discord bot is not running (missing token?).",
         )
+
+    style = NOTIFICATION_TYPES.get((notif_type or "").strip().lower())
 
     async def _send():
         user = _client.get_user(int(discord_id))
@@ -96,7 +434,12 @@ def send_dm(
                     "🇫🇷 Utilisateur Discord introuvable. / 🇺🇸 Discord user not found."
                 )
 
-        embed = discord.Embed(description=message, color=discord.Color.blurple())
+        embed = discord.Embed(
+            description=message,
+            color=style["color"] if style else discord.Color.blurple(),
+        )
+        if style:
+            embed.title = style["title"]
         if key_prefix:
             embed.set_footer(
                 text=f"Envoyé via la clé {key_prefix}… — désactivable depuis votre dashboard Relay"
