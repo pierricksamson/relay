@@ -478,16 +478,7 @@ def create_app() -> Flask:
     def not_found(_e):
         return render_template("index.html"), 404
 
-    @app.route("/debug")
-    def debug():
-        return {
-            "scheme": request.scheme,
-            "url_root": request.url_root,
-            "host_url": request.host_url,
-            "is_secure": request.is_secure,
-            "x_forwarded_proto": request.headers.get("X-Forwarded-Proto"),
-        }
-
+    
     return app
 
 
