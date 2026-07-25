@@ -112,7 +112,7 @@ def create_app() -> Flask:
 
     @app.get("/")
     def index():
-        return render_template("index.html")
+        return render_template("index.html", base_url=Config.BASE_URL)
 
     @app.get("/cgu")
     def cgu():

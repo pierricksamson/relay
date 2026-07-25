@@ -86,7 +86,7 @@
   <pre class="codeblock"><code><span class="tok-kw">import</span> requests
 
 requests.post(
-    <span class="tok-str">"{{ request.url_root.rstrip('/') }}/api/send"</span>,
+    <span class="tok-str">"{{ base_url }}/api/send"</span>,
     json={
         <span class="tok-str">"api_key"</span>: <span class="tok-str">"pk_votre_cle"</span>,
         <span class="tok-str">"message"</span>: <span class="tok-str">"Mon serveur est démarré ✅"</span>,
