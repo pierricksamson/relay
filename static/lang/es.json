@@ -101,6 +101,7 @@
   "docs_help_title": "¿Necesitas ayuda?",
   "docs_help_desc": "¿Una pregunta sobre la API, un bug? El servidor Discord es la forma más rápida de obtener una respuesta.",
   "docs_help_cta": "Unirse al Discord",
+  "docs_help_source": "Ver el código fuente",
   "docs_examples_title": "Ejemplos",
   "docs_good_to_know": "Información útil",
   "docs_tip1": "Una clave revocada desde el dashboard deja de funcionar inmediatamente.",
@@ -129,7 +130,7 @@
   "footer_tagline": "Relay — un retransmisor de notificaciones, no una red social.",
   "footer_docs": "Documentación",
   "footer_trans": "Traducido del francés",
-  "footer_cgu": "Términos del Servicio",
+  "footer_cgu": "CGU",
 
   "modal_cancel": "Cancelar",
   "modal_confirm": "Confirmar",

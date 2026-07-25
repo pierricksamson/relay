@@ -101,6 +101,7 @@
   "docs_help_title": "Besoin d'aide ?",
   "docs_help_desc": "Une question sur l'API, un bug ? Le serveur Discord est le plus rapide pour obtenir une réponse.",
   "docs_help_cta": "Rejoindre le Discord",
+  "docs_help_source": "Voir le code source",
   "docs_examples_title": "Exemples",
   "docs_good_to_know": "Bon à savoir",
   "docs_tip1": "Une clé révoquée depuis le dashboard cesse de fonctionner immédiatement.",

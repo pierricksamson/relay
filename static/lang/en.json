@@ -101,6 +101,7 @@
   "docs_help_title": "Need help?",
   "docs_help_desc": "Question about the API, found a bug? The Discord server is the fastest way to get an answer.",
   "docs_help_cta": "Join the Discord",
+  "docs_help_source": "View source code",
   "docs_examples_title": "Examples",
   "docs_good_to_know": "Good to know",
   "docs_tip1": "A key revoked from the dashboard stops working immediately.",

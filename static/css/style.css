@@ -488,6 +488,16 @@ p { color: var(--text-muted); }
 .docs-help-title { color: var(--text); font-weight: 600; font-size: 0.9rem; margin: 10px 0 4px; }
 .docs-help-desc { font-size: 0.8rem; margin: 0 0 14px; }
 .docs-help-card .btn { display: inline-block; width: 100%; text-align: center; box-sizing: border-box; }
+.docs-help-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.docs-help-source:hover { color: var(--text); }
 
 .docs-heading {
   display: flex;
