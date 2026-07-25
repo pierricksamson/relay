@@ -8,57 +8,100 @@
   <h1 data-i18n="docs_title"></h1>
   <p class="hero-sub docs-intro" data-i18n="docs_intro"></p>
 
-  <div class="endpoint-card">
-    <div class="endpoint-line">
-      <span class="method method-post">POST</span>
-      <code>/api/send</code>
-    </div>
+  <div class="docs-layout">
 
-    <h3 data-i18n="docs_body_title"></h3>
-    <table class="table table-params">
-      <thead>
-        <tr>
-          <th data-i18n="th_field"></th>
-          <th data-i18n="th_type" style="width: 150px;"></th>
-          <th data-i18n="th_desc"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><code>api_key</code></td><td>string</td><td data-i18n="param_api_key_desc"></td></tr>
-        <tr><td><code>message</code></td><td>string</td><td data-i18n="param_message_desc"></td></tr>
-        <tr><td><code>type</code></td><td>string <span class="badge badge-muted" data-i18n="param_optional_badge"></span></td><td data-i18n="param_type_desc"></td></tr>
-      </tbody>
-    </table>
+    <aside class="docs-sidebar">
+      <nav class="toc" aria-label="Sommaire" data-toc>
+        <p class="toc-title" data-i18n="docs_toc_title"></p>
+        <ul class="toc-list">
+          <li>
+            <a href="#endpoint" data-toc-link data-i18n="docs_endpoint_title"></a>
+            <ul class="toc-sublist">
+              <li><a href="#body" data-toc-link data-i18n="docs_body_title"></a></li>
+              <li><a href="#responses" data-toc-link data-i18n="docs_responses_title"></a></li>
+            </ul>
+          </li>
+          <li><a href="#examples" data-toc-link data-i18n="docs_examples_title"></a></li>
+          <li><a href="#types" data-toc-link data-i18n="docs_types_title"></a></li>
+          <li><a href="#good-to-know" data-toc-link data-i18n="docs_good_to_know"></a></li>
+        </ul>
+      </nav>
 
-    <h3 data-i18n="docs_responses_title"></h3>
-    <table class="table table-params">
-      <thead>
-        <tr>
-          <th data-i18n="th_code"></th>
-          <th data-i18n="th_meaning"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><span class="badge badge-online">200</span></td><td data-i18n="resp_200"></td></tr>
-        <tr><td><span class="badge badge-muted">400</span></td><td data-i18n="resp_400"></td></tr>
-        <tr><td><span class="badge badge-danger">401</span></td><td data-i18n="resp_401"></td></tr>
-        <tr><td><span class="badge badge-danger">413</span></td><td data-i18n="resp_413"></td></tr>
-        <tr><td><span class="badge badge-danger">429</span></td><td><span data-i18n="resp_429"></span> ({{ limit }}/minutes <i class='bx bx-shield-quarter' style='color:#ffffff'></i> <span data-i18n="resp_429_suffix"></span>)</td></tr>
-        <tr><td><span class="badge badge-danger">502</span></td><td data-i18n="resp_502"></td></tr>
-      </tbody>
-    </table>
-  </div>
+      <div class="docs-help-card">
+        <box-icon type='logo' name='discord-alt' color="#7289ff" style='font-size:22px;'></box-icon>
+        <p class="docs-help-title" data-i18n="docs_help_title"></p>
+        <p class="docs-help-desc" data-i18n="docs_help_desc"></p>
+        <a class="btn btn-discord btn-sm" href="https://discord.gg/HE7qBJR6d9" target="_blank" rel="noopener" style="color:white!important;" data-i18n="docs_help_cta"></a>
+      </div>
+    </aside>
 
-  <h2 data-i18n="docs_examples_title"></h2>
+    <div class="docs-content">
 
-  <div class="tabs" data-tabs>
-    <div class="tab-buttons">
-      <button class="tab-btn active" data-tab="python">Python</button>
-      <button class="tab-btn" data-tab="curl">cURL</button>
-      <button class="tab-btn" data-tab="js">JavaScript</button>
-    </div>
+      <h2 id="endpoint" class="docs-heading">
+        <span data-i18n="docs_endpoint_title"></span>
+        <button type="button" class="anchor-link" data-anchor="endpoint" aria-label="Copier le lien"><box-icon name='link-alt' size="xs" color="#8b93a7"></box-icon></button>
+      </h2>
 
-    <pre class="codeblock tab-panel active" data-panel="python"><code><span class="tok-kw">import</span> requests
+      <div class="endpoint-card">
+        <div class="endpoint-line">
+          <span class="method method-post">POST</span>
+          <code>/api/send</code>
+        </div>
+
+        <h3 id="body" class="docs-heading">
+          <span data-i18n="docs_body_title"></span>
+          <button type="button" class="anchor-link" data-anchor="body" aria-label="Copier le lien"><box-icon name='link-alt' size="xs" color="#8b93a7"></box-icon></button>
+        </h3>
+        <table class="table table-params">
+          <thead>
+            <tr>
+              <th data-i18n="th_field"></th>
+              <th data-i18n="th_type" style="width: 150px;"></th>
+              <th data-i18n="th_desc"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>api_key</code></td><td>string</td><td data-i18n="param_api_key_desc"></td></tr>
+            <tr><td><code>message</code></td><td>string</td><td data-i18n="param_message_desc"></td></tr>
+            <tr><td><code>type</code></td><td>string <span class="badge badge-muted" data-i18n="param_optional_badge"></span></td><td data-i18n="param_type_desc"></td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="responses" class="docs-heading">
+          <span data-i18n="docs_responses_title"></span>
+          <button type="button" class="anchor-link" data-anchor="responses" aria-label="Copier le lien"><box-icon name='link-alt' size="xs" color="#8b93a7"></box-icon></button>
+        </h3>
+        <table class="table table-params">
+          <thead>
+            <tr>
+              <th data-i18n="th_code"></th>
+              <th data-i18n="th_meaning"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge badge-online">200</span></td><td data-i18n="resp_200"></td></tr>
+            <tr><td><span class="badge badge-muted">400</span></td><td data-i18n="resp_400"></td></tr>
+            <tr><td><span class="badge badge-danger">401</span></td><td data-i18n="resp_401"></td></tr>
+            <tr><td><span class="badge badge-danger">413</span></td><td data-i18n="resp_413"></td></tr>
+            <tr><td><span class="badge badge-danger">429</span></td><td><span data-i18n="resp_429"></span> ({{ limit }}/minutes <i class='bx bx-shield-quarter' style='color:#ffffff'></i> <span data-i18n="resp_429_suffix"></span>)</td></tr>
+            <tr><td><span class="badge badge-danger">502</span></td><td data-i18n="resp_502"></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="examples" class="docs-heading">
+        <span data-i18n="docs_examples_title"></span>
+        <button type="button" class="anchor-link" data-anchor="examples" aria-label="Copier le lien"><box-icon name='link-alt' size="xs" color="#8b93a7"></box-icon></button>
+      </h2>
+
+      <div class="tabs" data-tabs>
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="python">Python</button>
+          <button class="tab-btn" data-tab="curl">cURL</button>
+          <button class="tab-btn" data-tab="js">JavaScript</button>
+        </div>
+
+        <pre class="codeblock tab-panel active" data-panel="python"><code><span class="tok-kw">import</span> requests
 
 response = requests.post(
     <span class="tok-str">"{{ base_url }}/api/send"</span>,
@@ -70,11 +113,11 @@ response = requests.post(
 )
 <span class="tok-kw">print</span>(response.status_code, response.json())</code></pre>
 
-    <pre class="codeblock tab-panel" data-panel="curl"><code>curl -X POST {{ base_url }}/api/send \
+        <pre class="codeblock tab-panel" data-panel="curl"><code>curl -X POST {{ base_url }}/api/send \
   -H <span class="tok-str">"Content-Type: application/json"</span> \
   -d <span class="tok-str">'{"api_key": "pk_votre_cle", "message": "Deploy terminé ✅", "type": "success"}'</span></code></pre>
 
-    <pre class="codeblock tab-panel" data-panel="js"><code><span class="tok-kw">await</span> fetch(<span class="tok-str">"{{ base_url }}/api/send"</span>, {
+        <pre class="codeblock tab-panel" data-panel="js"><code><span class="tok-kw">await</span> fetch(<span class="tok-str">"{{ base_url }}/api/send"</span>, {
   method: <span class="tok-str">"POST"</span>,
   headers: { <span class="tok-str">"Content-Type"</span>: <span class="tok-str">"application/json"</span> },
   body: JSON.stringify({
@@ -83,42 +126,51 @@ response = requests.post(
     type: <span class="tok-str">"success"</span>,
   }),
 });</code></pre>
-  </div>
+      </div>
 
-  <h2 data-i18n="docs_types_title"></h2>
-  <p class="hero-sub docs-intro" data-i18n="docs_types_intro"></p>
+      <h2 id="types" class="docs-heading">
+        <span data-i18n="docs_types_title"></span>
+        <button type="button" class="anchor-link" data-anchor="types" aria-label="Copier le lien"><box-icon name='link-alt' size="xs" color="#8b93a7"></box-icon></button>
+      </h2>
+      <p class="hero-sub docs-intro" data-i18n="docs_types_intro"></p>
 
-  {% for cat in type_categories %}
-  <h3 class="types-cat-title" data-i18n="{{ cat.label_key }}"></h3>
-  <table class="table table-params types-table">
-    <thead>
-      <tr>
-        <th data-i18n="th_name" style="width: 160px;"></th>
-        <th data-i18n="th_title"></th>
-        <th data-i18n="th_color" style="width: 120px;"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for t in cat.entries %}
-      <tr>
-        <td><code>{{ t.name }}</code></td>
-        <td>{{ t.title }}</td>
-        <td>
-          <span class="color-swatch" style="background:{{ t.color_hex }}"></span>
-          <code>{{ t.color_hex }}</code>
-        </td>
-      </tr>
+      {% for cat in type_categories %}
+      <h3 class="types-cat-title" data-i18n="{{ cat.label_key }}"></h3>
+      <table class="table table-params types-table">
+        <thead>
+          <tr>
+            <th data-i18n="th_name" style="width: 160px;"></th>
+            <th data-i18n="th_title"></th>
+            <th data-i18n="th_color" style="width: 120px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in cat.entries %}
+          <tr>
+            <td><code>{{ t.name }}</code></td>
+            <td>{{ t.title }}</td>
+            <td>
+              <span class="color-swatch" style="background:{{ t.color_hex }}"></span>
+              <code>{{ t.color_hex }}</code>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
       {% endfor %}
-    </tbody>
-  </table>
-  {% endfor %}
 
-  <h2 data-i18n="docs_good_to_know"></h2>
-  <ul class="docs-list">
-    <li data-i18n="docs_tip1"></li>
-    <li data-i18n="docs_tip2"></li>
-    <li data-i18n="docs_tip3"></li>
-  </ul>
+      <h2 id="good-to-know" class="docs-heading">
+        <span data-i18n="docs_good_to_know"></span>
+        <button type="button" class="anchor-link" data-anchor="good-to-know" aria-label="Copier le lien"><box-icon name='link-alt' size="xs" color="#8b93a7"></box-icon></button>
+      </h2>
+      <ul class="docs-list">
+        <li data-i18n="docs_tip1"></li>
+        <li data-i18n="docs_tip2"></li>
+        <li data-i18n="docs_tip3"></li>
+      </ul>
+
+    </div>
+  </div>
 
 </section>
 

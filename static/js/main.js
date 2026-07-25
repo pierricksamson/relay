@@ -83,6 +83,53 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // --- 1bis. Sommaire /docs : suivi de scroll + liens d'ancre copiables ---
+  const tocLinks = document.querySelectorAll("[data-toc-link]");
+  if (tocLinks.length) {
+    const headings = Array.from(tocLinks)
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    const setActive = (id) => {
+      tocLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-90px 0px -70% 0px", threshold: 0 }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+
+    if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target) setTimeout(() => target.scrollIntoView({ block: "start" }), 0);
+    }
+  }
+
+  document.querySelectorAll(".anchor-link[data-anchor]").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const id = btn.dataset.anchor;
+      const url = `${location.origin}${location.pathname}#${id}`;
+      history.replaceState(null, "", `#${id}`);
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch (err) {
+        console.error("Impossible de copier le lien :", err);
+      }
+      btn.classList.add("copied");
+      setTimeout(() => btn.classList.remove("copied"), 1200);
+    });
+  });
+
   // --- 2. Bouton "Copier" (clé API révélée dans le dashboard) ---
 document.querySelectorAll("[data-copy]").forEach((btn) => {
   btn.addEventListener("click", async () => {

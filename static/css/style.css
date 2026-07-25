@@ -433,6 +433,96 @@ p { color: var(--text-muted); }
 .docs { padding: 56px 24px 100px; }
 .docs-intro { max-width: 640px; }
 
+.docs-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 56px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+.docs-sidebar {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+
+.toc-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+}
+
+.toc-list, .toc-sublist { list-style: none; margin: 0; padding: 0; }
+.toc-list > li { margin-bottom: 4px; }
+.toc-sublist { margin: 2px 0 6px 14px; border-left: 1px solid var(--border); }
+
+.toc-list a {
+  display: block;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  padding: 5px 0 5px 12px;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.toc-sublist a { font-size: 0.8rem; padding-left: 14px; }
+
+.toc-list a:hover { color: var(--text); }
+.toc-list a.active { color: var(--accent-strong); border-left-color: var(--accent-strong); }
+
+.docs-help-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 18px;
+}
+.docs-help-title { color: var(--text); font-weight: 600; font-size: 0.9rem; margin: 10px 0 4px; }
+.docs-help-desc { font-size: 0.8rem; margin: 0 0 14px; }
+.docs-help-card .btn { display: inline-block; width: 100%; text-align: center; box-sizing: border-box; }
+
+.docs-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  scroll-margin-top: 90px;
+}
+.anchor-link {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.docs-heading:hover .anchor-link,
+.anchor-link:focus-visible { opacity: 1; }
+.anchor-link.copied box-icon { color: var(--online) !important; }
+
+@media (max-width: 900px) {
+  .docs-layout { grid-template-columns: 1fr; }
+  .docs-sidebar {
+    position: static;
+    max-height: none;
+    order: -1;
+  }
+  .toc-sublist { display: none; }
+  .toc-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .toc-list > li { margin: 0; }
+  .toc-list a { border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; }
+  .toc-list a.active { background: var(--accent-soft); }
+  .docs-help-card { display: none; }
+}
+
 .endpoint-card {
   background: var(--surface);
   border: 1px solid var(--border);
