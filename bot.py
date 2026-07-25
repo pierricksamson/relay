@@ -14,6 +14,7 @@ Requirements for the bot to be able to DM someone:
 """
 
 import asyncio
+import io
 import logging
 import threading
 
@@ -418,6 +419,9 @@ def send_dm(
     message: str,
     key_prefix: str | None = None,
     notif_type: str | None = None,
+    title: str | None = None,
+    color: "discord.Color | None" = None,
+    files: list[tuple[str, bytes]] | None = None,
     timeout: float = 15.0,
 ) -> SendResult:
     """
@@ -433,6 +437,16 @@ def send_dm(
     "info" | "warning" | "alert" | "success". If None/empty/unknown, falls
     back to the historical plain blurple embed with no title (unchanged
     behavior).
+
+    title / color: optional custom embed title and color. Only taken into
+    account when `notif_type` is NOT provided — a predefined type always
+    wins, so the type table documented in /docs stays authoritative. `color`
+    is expected to already be a discord.Color instance (parsed/validated by
+    the caller).
+
+    files: optional list of (filename, raw_bytes) tuples. Each entry is
+    wrapped in an in-memory io.BytesIO buffer and handed straight to
+    discord.File — nothing is ever written to disk on the Relay server.
     """
     if _loop is None:
         return SendResult(
@@ -453,17 +467,31 @@ def send_dm(
                     "🇫🇷 Utilisateur Discord introuvable. / 🇺🇸 Discord user not found."
                 )
 
+        if style:
+            # Un type prédéfini prime toujours sur un title/color custom.
+            embed_title = style["title"]
+            embed_color = style["color"]
+        else:
+            embed_title = title
+            embed_color = color if color is not None else discord.Color.blurple()
+
         embed = discord.Embed(
             description=message,
-            color=style["color"] if style else discord.Color.blurple(),
+            color=embed_color,
         )
-        if style:
-            embed.title = style["title"]
+        if embed_title:
+            embed.title = embed_title
         if key_prefix:
             embed.set_footer(
                 text=f"Envoyé via la clé {key_prefix}… — désactivable depuis votre dashboard Relay"
             )
-        await user.send(embed=embed)
+
+        discord_files = [
+            discord.File(io.BytesIO(data), filename=filename)
+            for filename, data in (files or [])
+        ]
+
+        await user.send(embed=embed, files=discord_files or None)
 
     future = asyncio.run_coroutine_threadsafe(_send(), _loop)
     try:

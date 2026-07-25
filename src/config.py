@@ -40,3 +40,14 @@ class Config:
     # Nombre max de clés API actives par utilisateur (valeur par défaut,
     # modifiable ensuite dynamiquement depuis le dashboard admin).
     MAX_API_KEYS_PER_USER = int(os.environ.get("MAX_API_KEYS_PER_USER", "5"))
+
+    # ---------------------------------------------------------------
+    # Pièces jointes (/api/send) — jamais écrites sur disque, transmises
+    # telles quelles à Discord via un buffer mémoire (io.BytesIO).
+    # ---------------------------------------------------------------
+    # Nombre max de fichiers par notification (limite Discord native = 10).
+    MAX_ATTACHMENTS_PER_MESSAGE = int(os.environ.get("MAX_ATTACHMENTS_PER_MESSAGE", "10"))
+    # Poids total (somme de tous les fichiers) autorisé pour un même message,
+    # en Mo. 25 Mo = limite par défaut appliquée par Discord aux bots non
+    # boostés ; augmentez si votre serveur bénéficie de boosts Nitro.
+    MAX_ATTACHMENT_TOTAL_MB = int(os.environ.get("MAX_ATTACHMENT_TOTAL_MB", "25"))

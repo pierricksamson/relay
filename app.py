@@ -1,9 +1,13 @@
+import base64
+import binascii
 import os
+import re
 import secrets
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 import json
 
+import discord
 from dotenv import set_key
 from flask import Flask, abort, jsonify, redirect, render_template, request, session, url_for, Response
 from flask_limiter import Limiter
@@ -21,6 +25,17 @@ def bilingual(fr: str, en: str) -> str:
     return f"🇺🇸 {en} / 🇫🇷 {fr}"
 
 
+_HEX_COLOR_RE = re.compile(r"^#?([0-9a-fA-F]{6})$")
+
+
+def parse_hex_color(raw: str) -> "discord.Color | None":
+    """Parse '#RRGGBB' or 'RRGGBB' into a discord.Color, or None if invalid."""
+    match = _HEX_COLOR_RE.match(raw.strip())
+    if not match:
+        return None
+    return discord.Color(int(match.group(1), 16))
+
+
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -30,7 +45,13 @@ def create_app() -> Flask:
         SESSION_COOKIE_SAMESITE="Lax",   # limite les envois cross-site
         PERMANENT_SESSION_LIFETIME=timedelta(days=12),
     )
-    app.config["MAX_CONTENT_LENGTH"] = 64 * 1024  # 64 Ko, large marge pour un message de 2000 caractères
+    # 64 Ko de marge pour le texte (message/title/etc.) + le poids base64 des
+    # pièces jointes (~4/3 du poids réel, cf. Config.MAX_ATTACHMENT_TOTAL_MB).
+    # Rien de tout ça n'est jamais écrit sur disque : décodé en mémoire puis
+    # transmis directement à Discord (voir bot.send_dm).
+    app.config["MAX_CONTENT_LENGTH"] = (
+        64 * 1024 + int(Config.MAX_ATTACHMENT_TOTAL_MB * 1024 * 1024 * 4 / 3)
+    )
     app.secret_key = Config.SECRET_KEY
     csrf = CSRFProtect(app)
     app.jinja_env.globals["csrf_token"] = generate_csrf
@@ -350,6 +371,9 @@ def create_app() -> Flask:
         api_key = payload.get("api_key")
         message = payload.get("message")
         notif_type_raw = payload.get("type")  # optionnel : "info" | "warning" | "alert" | "success"
+        title_raw = payload.get("title")      # optionnel, ignoré si 'type' est fourni
+        color_raw = payload.get("color")      # optionnel, ignoré si 'type' est fourni
+        files_raw = payload.get("files")      # optionnel : liste de {filename, content_base64}
 
         if not api_key or not isinstance(api_key, str):
             return jsonify(error=bilingual(
@@ -383,6 +407,103 @@ def create_app() -> Flask:
                 )), 400
             notif_type = normalized
 
+        # 'title' et 'color' sont facultatifs et n'ont d'effet que si 'type'
+        # n'est pas fourni (un type prédéfini reste prioritaire, cf. bot.py).
+        custom_title = None
+        if title_raw is not None:
+            if not isinstance(title_raw, str):
+                return jsonify(error=bilingual(
+                    "Champ 'title' invalide.",
+                    "Invalid 'title' field.",
+                )), 400
+            custom_title = title_raw.strip()[:256] or None  # 256 = limite Discord pour un titre d'embed
+
+        custom_color = None
+        if color_raw is not None:
+            if not isinstance(color_raw, str):
+                return jsonify(error=bilingual(
+                    "Champ 'color' invalide.",
+                    "Invalid 'color' field.",
+                )), 400
+            if color_raw.strip():
+                custom_color = parse_hex_color(color_raw)
+                if custom_color is None:
+                    return jsonify(error=bilingual(
+                        "Champ 'color' invalide. Format attendu : '#RRGGBB' (ex: '#5865F2').",
+                        "Invalid 'color' field. Expected format: '#RRGGBB' (e.g. '#5865F2').",
+                    )), 400
+
+        # 'files' : pièces jointes envoyées en base64, décodées et transmises
+        # directement à Discord depuis la mémoire — jamais écrites sur disque
+        # côté serveur Relay (voir bot.send_dm).
+        decoded_files: list[tuple[str, bytes]] = []
+        if files_raw is not None:
+            if not isinstance(files_raw, list):
+                return jsonify(error=bilingual(
+                    "Champ 'files' invalide : une liste est attendue.",
+                    "Invalid 'files' field: a list is expected.",
+                )), 400
+            max_files = Config.MAX_ATTACHMENTS_PER_MESSAGE
+            if len(files_raw) > max_files:
+                return jsonify(error=bilingual(
+                    f"Trop de fichiers : {max_files} maximum par notification (limite Discord).",
+                    f"Too many files: {max_files} maximum per notification (Discord limit).",
+                )), 400
+
+            total_size = 0
+            max_total_bytes = Config.MAX_ATTACHMENT_TOTAL_MB * 1024 * 1024
+            for i, entry in enumerate(files_raw):
+                if not isinstance(entry, dict):
+                    return jsonify(error=bilingual(
+                        f"Fichier #{i + 1} invalide : un objet est attendu.",
+                        f"Invalid file #{i + 1}: an object is expected.",
+                    )), 400
+
+                filename = entry.get("filename")
+                content_b64 = entry.get("content_base64")
+                if not filename or not isinstance(filename, str):
+                    return jsonify(error=bilingual(
+                        f"Fichier #{i + 1} : champ 'filename' manquant ou invalide.",
+                        f"File #{i + 1}: missing or invalid 'filename' field.",
+                    )), 400
+                if not content_b64 or not isinstance(content_b64, str):
+                    return jsonify(error=bilingual(
+                        f"Fichier #{i + 1} : champ 'content_base64' manquant ou invalide.",
+                        f"File #{i + 1}: missing or invalid 'content_base64' field.",
+                    )), 400
+
+                # os.path.basename empêche toute tentative de path traversal
+                # dans le nom de fichier (ex: '../../etc/passwd').
+                safe_filename = os.path.basename(filename.strip())[:256]
+                if not safe_filename:
+                    return jsonify(error=bilingual(
+                        f"Fichier #{i + 1} : nom de fichier invalide.",
+                        f"File #{i + 1}: invalid filename.",
+                    )), 400
+
+                try:
+                    raw_bytes = base64.b64decode(content_b64, validate=True)
+                except (binascii.Error, ValueError):
+                    return jsonify(error=bilingual(
+                        f"Fichier #{i + 1} : contenu base64 invalide.",
+                        f"File #{i + 1}: invalid base64 content.",
+                    )), 400
+
+                if not raw_bytes:
+                    return jsonify(error=bilingual(
+                        f"Fichier #{i + 1} : fichier vide.",
+                        f"File #{i + 1}: empty file.",
+                    )), 400
+
+                total_size += len(raw_bytes)
+                if total_size > max_total_bytes:
+                    return jsonify(error=bilingual(
+                        f"Poids total des pièces jointes trop élevé : {Config.MAX_ATTACHMENT_TOTAL_MB} Mo maximum (limite Discord).",
+                        f"Total attachments size too large: {Config.MAX_ATTACHMENT_TOTAL_MB} MB maximum (Discord limit).",
+                    )), 413
+
+                decoded_files.append((safe_filename, raw_bytes))
+
         auth = db.verify_api_key(api_key)
         if auth is None:
             return jsonify(error=bilingual(
@@ -409,6 +530,9 @@ def create_app() -> Flask:
             message,
             key_prefix=key_prefix,
             notif_type=notif_type,
+            title=custom_title,
+            color=custom_color,
+            files=decoded_files,
         )
 
         db.log_notification(
@@ -417,6 +541,7 @@ def create_app() -> Flask:
             message=message,
             status="sent" if result.ok else "failed",
             error=None if result.ok else result.error,
+            attachments_count=len(decoded_files),
         )
 
         if not result.ok:

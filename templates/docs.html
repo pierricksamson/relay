@@ -69,8 +69,12 @@
             <tr><td><code>api_key</code></td><td>string</td><td data-i18n="param_api_key_desc"></td></tr>
             <tr><td><code>message</code></td><td>string</td><td data-i18n="param_message_desc"></td></tr>
             <tr><td><code>type</code></td><td>string <span class="badge badge-muted" data-i18n="param_optional_badge"></span></td><td data-i18n="param_type_desc"></td></tr>
+            <tr><td><code>title</code></td><td>string <span class="badge badge-muted" data-i18n="param_optional_badge"></span></td><td data-i18n="param_title_desc"></td></tr>
+            <tr><td><code>color</code></td><td>string <span class="badge badge-muted" data-i18n="param_optional_badge"></span></td><td data-i18n="param_color_desc"></td></tr>
+            <tr><td><code>files</code></td><td>array <span class="badge badge-muted" data-i18n="param_optional_badge"></span></td><td data-i18n="param_files_desc"></td></tr>
           </tbody>
         </table>
+        <p class="hero-sub docs-intro" data-i18n="docs_files_shape" style="margin-top: 1rem;"></p>
 
         <h3 id="responses" class="docs-heading">
           <span data-i18n="docs_responses_title"></span>
@@ -106,7 +110,11 @@
           <button class="tab-btn" data-tab="js">JavaScript</button>
         </div>
 
-        <pre class="codeblock tab-panel active" data-panel="python"><code><span class="tok-kw">import</span> requests
+        <pre class="codeblock tab-panel active" data-panel="python"><code><span class="tok-kw">import</span> base64
+<span class="tok-kw">import</span> requests
+
+<span class="tok-kw">with</span> <span class="tok-kw">open</span>(<span class="tok-str">"rapport.pdf"</span>, <span class="tok-str">"rb"</span>) <span class="tok-kw">as</span> f:
+    encoded = base64.b64encode(f.read()).decode()
 
 response = requests.post(
     <span class="tok-str">"{{ base_url }}/api/send"</span>,
@@ -114,13 +122,21 @@ response = requests.post(
         <span class="tok-str">"api_key"</span>: <span class="tok-str">"pk_votre_cle"</span>,
         <span class="tok-str">"message"</span>: <span class="tok-str">"Le job de backup s'est terminé avec succès."</span>,
         <span class="tok-str">"type"</span>: <span class="tok-str">"success"</span>,
+        <span class="tok-str">"files"</span>: [
+            {<span class="tok-str">"filename"</span>: <span class="tok-str">"rapport.pdf"</span>, <span class="tok-str">"content_base64"</span>: encoded},
+        ],
     },
 )
 <span class="tok-kw">print</span>(response.status_code, response.json())</code></pre>
 
         <pre class="codeblock tab-panel" data-panel="curl"><code>curl -X POST {{ base_url }}/api/send \
   -H <span class="tok-str">"Content-Type: application/json"</span> \
-  -d <span class="tok-str">'{"api_key": "pk_votre_cle", "message": "Deploy terminé ✅", "type": "success"}'</span></code></pre>
+  -d <span class="tok-str">'{
+    "api_key": "pk_votre_cle",
+    "message": "Build custom sans type prédéfini",
+    "title": "🔧 Build terminé",
+    "color": "#5865F2"
+  }'</span></code></pre>
 
         <pre class="codeblock tab-panel" data-panel="js"><code><span class="tok-kw">await</span> fetch(<span class="tok-str">"{{ base_url }}/api/send"</span>, {
   method: <span class="tok-str">"POST"</span>,
@@ -172,6 +188,7 @@ response = requests.post(
         <li data-i18n="docs_tip1"></li>
         <li data-i18n="docs_tip2"></li>
         <li data-i18n="docs_tip3"></li>
+        <li data-i18n="docs_tip4"></li>
       </ul>
 
     </div>

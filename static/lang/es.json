@@ -75,7 +75,7 @@
   "th_notifs": "Notifs",
   "th_admin": "Admin",
 
-  "docs_eyebrow": "Referencia de la API V1.1",
+  "docs_eyebrow": "Referencia de la API v1.3",
   "docs_title": "Solo un endpoint que recordar",
   "docs_intro": "Relay expone un único endpoint público. Autentícate usando la clave generada en tu dashboard, envía un mensaje y llegará directamente a tus DMs de Discord.",
   "docs_body_title": "Cuerpo de la solicitud (JSON)",

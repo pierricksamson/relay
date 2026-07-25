@@ -41,13 +41,17 @@ CREATE TABLE IF NOT EXISTS api_keys (
 );
 
 CREATE TABLE IF NOT EXISTS notifications (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    api_key_id  INTEGER REFERENCES api_keys(id) ON DELETE SET NULL,
-    message     TEXT NOT NULL,
-    status      TEXT NOT NULL,  -- 'sent' | 'failed'
-    error       TEXT,
-    created_at  TEXT NOT NULL
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id            INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    api_key_id         INTEGER REFERENCES api_keys(id) ON DELETE SET NULL,
+    message            TEXT NOT NULL,
+    status             TEXT NOT NULL,  -- 'sent' | 'failed'
+    error              TEXT,
+    -- Nombre de pièces jointes envoyées avec la notification. Seul ce
+    -- compteur est conservé : le contenu des fichiers n'est jamais stocké
+    -- côté serveur (décodé en mémoire, transmis à Discord, puis oublié).
+    attachments_count  INTEGER NOT NULL DEFAULT 0,
+    created_at         TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS audit_log (
@@ -81,6 +85,10 @@ def init_db(db_path: str | None = None) -> None:
         # 'admin' (CREATE TABLE IF NOT EXISTS ne modifie pas un schéma existant).
         if not _column_exists(conn, "users", "admin"):
             conn.execute("ALTER TABLE users ADD COLUMN admin INTEGER NOT NULL DEFAULT 0")
+        if not _column_exists(conn, "notifications", "attachments_count"):
+            conn.execute(
+                "ALTER TABLE notifications ADD COLUMN attachments_count INTEGER NOT NULL DEFAULT 0"
+            )
         conn.commit()
 
 
@@ -228,12 +236,14 @@ def log_notification(
     message: str,
     status: str,
     error: str | None = None,
+    attachments_count: int = 0,
 ) -> None:
     with get_db() as db:
         db.execute(
-            "INSERT INTO notifications (user_id, api_key_id, message, status, error, created_at) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
-            (user_id, api_key_id, message[:2000], status, error, _now()),
+            "INSERT INTO notifications "
+            "(user_id, api_key_id, message, status, error, attachments_count, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (user_id, api_key_id, message[:2000], status, error, attachments_count, _now()),
         )
 
 

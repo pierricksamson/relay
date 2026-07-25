@@ -108,6 +108,11 @@
         <span class="notif-dot"></span>
         <div class="notif-body">
           <p class="notif-message">{{ n['message'] }}</p>
+          {% if n['attachments_count'] %}
+          <span class="badge badge-muted notif-attachments" title="{{ n['attachments_count'] }} pièce(s) jointe(s) — non conservée(s) sur le serveur">
+            📎 {{ n['attachments_count'] }}
+          </span>
+          {% endif %}
           {% if n['error'] %}
           <p class="notif-error">{{ n['error'] }}</p>
           {% endif %}
