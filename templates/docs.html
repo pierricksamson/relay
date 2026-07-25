@@ -85,6 +85,34 @@ response = requests.post(
 });</code></pre>
   </div>
 
+  <h2 data-i18n="docs_types_title"></h2>
+  <p class="hero-sub docs-intro" data-i18n="docs_types_intro"></p>
+
+  {% for cat in type_categories %}
+  <h3 class="types-cat-title" data-i18n="{{ cat.label_key }}"></h3>
+  <table class="table table-params types-table">
+    <thead>
+      <tr>
+        <th data-i18n="th_name" style="width: 160px;"></th>
+        <th data-i18n="th_title"></th>
+        <th data-i18n="th_color" style="width: 120px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in cat.entries %}
+      <tr>
+        <td><code>{{ t.name }}</code></td>
+        <td>{{ t.title }}</td>
+        <td>
+          <span class="color-swatch" style="background:{{ t.color_hex }}"></span>
+          <code>{{ t.color_hex }}</code>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+
   <h2 data-i18n="docs_good_to_know"></h2>
   <ul class="docs-list">
     <li data-i18n="docs_tip1"></li>

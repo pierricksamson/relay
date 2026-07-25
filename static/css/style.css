@@ -467,6 +467,26 @@ p { color: var(--text-muted); }
 .docs-list { color: var(--text-muted); font-size: 0.92rem; padding-left: 20px; }
 .docs-list li { margin-bottom: 10px; }
 
+.color-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 1px solid #ffffff20;
+}
+
+.types-cat-title {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin: 26px 0 6px;
+}
+.types-table { margin-bottom: 4px; }
+
 /* ---------------------------------------------------------------------
    Footer
 ------------------------------------------------------------------------ */

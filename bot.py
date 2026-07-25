@@ -360,6 +360,25 @@ NOTIFICATION_TYPES = {
     }
 }
 
+# Regroupement par catégorie, uniquement pour l'affichage dans /docs.
+# Chaque clé doit exister dans NOTIFICATION_TYPES ci-dessus.
+NOTIFICATION_CATEGORIES = [
+    ("cat_general", ["info", "success", "warning", "alert", "error", "critical"]),
+    ("cat_dev", ["debug", "test", "build", "compile", "deploy", "release", "rollback"]),
+    ("cat_infra", ["server", "startup", "shutdown", "restart", "maintenance", "uptime"]),
+    ("cat_monitoring", ["cpu", "ram", "disk", "temperature", "performance", "health"]),
+    ("cat_network", ["network", "connection", "timeout", "offline", "online"]),
+    ("cat_security", ["security", "login", "logout", "authentication", "permission", "attack", "firewall"]),
+    ("cat_database", ["database", "backup", "restore", "migration"]),
+    ("cat_api", ["api", "request", "rate_limit", "webhook"]),
+    ("cat_users", ["user", "signup", "delete_user"]),
+    ("cat_business", ["payment", "purchase", "invoice", "refund"]),
+    ("cat_ai", ["ai", "model", "training", "prediction"]),
+    ("cat_trading", ["trade", "buy", "sell", "profit", "loss", "market"]),
+    ("cat_bots", ["bot", "bot_online", "bot_offline", "command"]),
+    ("cat_files", ["file", "upload", "download", "storage"]),
+]
+
 
 @_client.event
 async def on_ready():

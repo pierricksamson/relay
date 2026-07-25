@@ -120,8 +120,25 @@ def create_app() -> Flask:
 
     @app.get("/docs")
     def docs():
+        type_categories = [
+            {
+                "label_key": label_key,
+                "entries": [
+                    {
+                        "name": key,
+                        "title": bot.NOTIFICATION_TYPES[key]["title"],
+                        "color_hex": f"#{bot.NOTIFICATION_TYPES[key]['color'].value:06x}",
+                    }
+                    for key in keys
+                ],
+            }
+            for label_key, keys in bot.NOTIFICATION_CATEGORIES
+        ]
         return render_template(
-            "docs.html", base_url=Config.BASE_URL, limit=db.get_rate_limit_per_minute()
+            "docs.html",
+            base_url=Config.BASE_URL,
+            limit=db.get_rate_limit_per_minute(),
+            type_categories=type_categories,
         )
 
     # -----------------------------------------------------------------
