@@ -113,17 +113,17 @@
         <pre class="codeblock tab-panel active" data-panel="python"><code><span class="tok-kw">import</span> base64
 <span class="tok-kw">import</span> requests
 
-<span class="tok-kw">with</span> <span class="tok-kw">open</span>(<span class="tok-str">"rapport.pdf"</span>, <span class="tok-str">"rb"</span>) <span class="tok-kw">as</span> f:
+<span class="tok-kw">with</span> <span class="tok-kw">open</span>(<span class="tok-str">"report.pdf"</span>, <span class="tok-str">"rb"</span>) <span class="tok-kw">as</span> f:
     encoded = base64.b64encode(f.read()).decode()
 
 response = requests.post(
     <span class="tok-str">"{{ base_url }}/api/send"</span>,
     json={
-        <span class="tok-str">"api_key"</span>: <span class="tok-str">"pk_votre_cle"</span>,
-        <span class="tok-str">"message"</span>: <span class="tok-str">"Le job de backup s'est terminé avec succès."</span>,
+        <span class="tok-str">"api_key"</span>: <span class="tok-str">"pk_your_key"</span>,
+        <span class="tok-str">"message"</span>: <span class="tok-str">"The backup job completed successfully."</span>,
         <span class="tok-str">"type"</span>: <span class="tok-str">"success"</span>,
         <span class="tok-str">"files"</span>: [
-            {<span class="tok-str">"filename"</span>: <span class="tok-str">"rapport.pdf"</span>, <span class="tok-str">"content_base64"</span>: encoded},
+            {<span class="tok-str">"filename"</span>: <span class="tok-str">"report.pdf"</span>, <span class="tok-str">"content_base64"</span>: encoded},
         ],
     },
 )
@@ -132,9 +132,9 @@ response = requests.post(
         <pre class="codeblock tab-panel" data-panel="curl"><code>curl -X POST {{ base_url }}/api/send \
   -H <span class="tok-str">"Content-Type: application/json"</span> \
   -d <span class="tok-str">'{
-    "api_key": "pk_votre_cle",
-    "message": "Build custom sans type prédéfini",
-    "title": "🔧 Build terminé",
+    "api_key": "pk_your_key",
+    "message": "Custom build with no predefined type",
+    "title": "🔧 Build finished",
     "color": "#5865F2"
   }'</span></code></pre>
 
@@ -142,8 +142,8 @@ response = requests.post(
   method: <span class="tok-str">"POST"</span>,
   headers: { <span class="tok-str">"Content-Type"</span>: <span class="tok-str">"application/json"</span> },
   body: JSON.stringify({
-    api_key: <span class="tok-str">"pk_votre_cle"</span>,
-    message: <span class="tok-str">"Deploy terminé ✅"</span>,
+    api_key: <span class="tok-str">"pk_your_key"</span>,
+    message: <span class="tok-str">"Deploy finished ✅"</span>,
     type: <span class="tok-str">"success"</span>,
   }),
 });</code></pre>
