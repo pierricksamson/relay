@@ -604,6 +604,7 @@ def create_app() -> Flask:
     def file_path(path):
         if "google" in path: 
             return render_template(path)
+        abort(404)
 
     @app.errorhandler(404)
     def not_found(_e):
