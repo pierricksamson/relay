@@ -180,7 +180,7 @@ def create_app() -> Flask:
             "Disallow: /logout",
             "",
             # Indique dynamiquement l'URL de ton sitemap
-            f"Sitemap: {url_for('sitemap', _external=True)}"
+            f"Sitemap: {url_for('sitemap', _external=True).replace("http", "https")}"
         ]
         return Response("\n".join(lines), mimetype="text/plain")
 
@@ -204,6 +204,7 @@ def create_app() -> Flask:
         for endpoint, priority, changefreq in pages:
             # _external=True permet d'avoir le lien complet (ex: https://tonsite.com/docs au lieu de juste /docs)
             url = url_for(endpoint, _external=True)
+            url.replace("http", "https")
             xml_sitemap += '  <url>\n'
             xml_sitemap += f'    <loc>{url}</loc>\n'
             xml_sitemap += f'    <lastmod>{lastmod}</lastmod>\n'
