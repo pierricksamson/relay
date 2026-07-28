@@ -213,7 +213,7 @@ def create_app() -> Flask:
 
         xml_sitemap += '</urlset>'
 
-        xml_sitemap.replace("http:", "https:")
+        xml_sitemap = xml_sitemap.replace("http:", "https:")
 
         # On renvoie bien du XML pour que les navigateurs et les bots le comprennent
         return Response(xml_sitemap, mimetype='application/xml')
