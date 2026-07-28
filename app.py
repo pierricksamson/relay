@@ -204,7 +204,6 @@ def create_app() -> Flask:
         for endpoint, priority, changefreq in pages:
             # _external=True permet d'avoir le lien complet (ex: https://tonsite.com/docs au lieu de juste /docs)
             url = url_for(endpoint, _external=True)
-            url.replace("http", "https")
             xml_sitemap += '  <url>\n'
             xml_sitemap += f'    <loc>{url}</loc>\n'
             xml_sitemap += f'    <lastmod>{lastmod}</lastmod>\n'
@@ -213,6 +212,8 @@ def create_app() -> Flask:
             xml_sitemap += '  </url>\n'
 
         xml_sitemap += '</urlset>'
+
+        xml_sitemap.replace("http:", "https:")
 
         # On renvoie bien du XML pour que les navigateurs et les bots le comprennent
         return Response(xml_sitemap, mimetype='application/xml')
